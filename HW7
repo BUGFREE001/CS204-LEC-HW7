@@ -1,0 +1,124 @@
+
+#1
+
+#include <stdio.h>
+#include <string.h>
+
+struct student{
+    int id;
+    char name[20];
+    double gpa;
+};
+
+int main()
+{
+    char option[5] = "yes";
+    double avg = 0,temp;
+    int count = 0,i,j;
+    struct student record;
+    FILE *fptr;
+    fptr = fopen("student.dat","wb");
+    while(strcmp(option,"EOF") != 0){
+        printf("Enter student ID: ");
+        scanf("%d",&record.id);
+        printf("Enter student name: ");
+        scanf("%s",record.name);
+        printf("Enter student's GPA: ");
+        scanf("%lf",&record.gpa);
+
+        //writing the structure detail to file using fwrite()
+
+        /************
+        
+        paramter -1: address of data to be written
+        parameter -2: size of data to be written
+        parameter-3 : number of records to be written
+        parameter-4: file pointer
+        
+        ************/
+
+        fwrite(&record, sizeof(struct student), 1, fptr);
+        printf("Do you want to enter more records? Enter yes to continue, EOF to stop: ");
+        scanf("%s",option);
+    }
+
+    printf("\nRecords written to student file.\n");
+    fclose(fptr);
+    fptr = fopen("student.dat","rb");
+
+   
+
+        /************
+        
+        paramter -1: address of data to be read
+        parameter -2: size of data to be read
+        parameter-3 : number of records to be read
+        parameter-4: file pointer
+        Giving fread() in while, to read until there is data
+        
+        ************/
+
+    while(fread(&record, sizeof(struct student),1,fptr)){
+        avg = avg + record.gpa;
+        count ++;
+    }
+
+    fclose(fptr);
+
+    avg = avg/(double)count;
+    printf("\nStudent Avergae GPA: %.2lf",avg);
+    double gpaArray[count];
+    
+    i=0;
+
+    fptr = fopen("student.dat","rb");
+    while(fread(&record, sizeof(struct student),1,fptr)) {
+        gpaArray[i] = record.gpa;
+        i ++;
+    }
+    
+    fclose(fptr);
+
+
+    //sort the array in descenging order
+
+       /******
+     * start a loop and hold an element
+     * start another loop and compare the outer loop's element ot every other element starting from next position of outer loop element
+     * if outerloop element(previous element) is less than inner loop (next element), then swap
+     * else continue
+     * WHen both loop ends, we will have the array sorted in descending order
+     * *****/
+
+
+     for(i=0;i<count;i++){
+         for(j=i+1;j<count;j++) {
+             if(gpaArray[i] < gpaArray[j]){
+                 temp = gpaArray[i];
+                 gpaArray[i] = gpaArray[j];
+                 gpaArray[j] = temp;
+             }
+         }
+     }
+     
+     printf("\nThe GPAs are sorted in descending order.");
+     fptr= fopen("sortedGPA.txt","w");
+     printf("\nWriting sorted GPA to text file...");
+     fprintf(fptr,"Sorted GPA:\n");
+     for(i=0;i<count;i++){
+         fprintf(fptr,"%.2lf\n",gpaArray[i]);
+     }
+     
+     fclose(fptr);
+     printf("\nSorted GPA written to file successfully.");
+
+     return 0;
+
+}
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+
+#2  
