@@ -121,4 +121,120 @@ int main()
 --------------------------------------------------------------------------------------------------------------------------------------
 
 
-#2  
+#3
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct employee
+{
+    int empno;
+    char name[30];
+    int basic, grade;
+
+};
+
+int main()
+{
+    int i,j,count=0;
+    int empNumber =1000;
+    char temp[30][30];
+    char swap[30];
+
+    struct employee e;
+    FILE *fptr;
+    fptr=fopen("employee.dat","r");
+    
+    if(fptr == NULL){
+        printf("FILE NOT FOUND.");
+        exit(1);
+    }
+
+
+    //read the data into structure variables
+    //Ours is a space separated file, so specify the format specifiers in the order of data to be read from the file in fscanf()
+
+    /*********
+
+     * Intialise a counter varibale to starting of sequence
+     * read a record
+     * check if the empno matches the counter variable
+     * if true, increment the counter varibale to check the next emp record
+     * if false, that means theat emp record is missing, loop and print the empNumber and increment by 2 (since we know the records are in ascending order it wont be found later also)
+     * repeat until EOF is reached
+
+    ***********/
+
+   
+
+    while(!feof(fptr)){
+        fscanf(fptr,"%d %s %d %d", &e.empno, e.name, &e.basic, &e.grade);
+        if(e.empno == empNumber)
+        {
+            empNumber ++;
+        }
+        
+        else{
+            printf("\nEmployee number: %d is missing.",empNumber);
+            empNumber = empNumber +2;
+        }
+
+        strcpy(temp[count],e.name);
+        count++;
+    }
+
+    fclose(fptr);
+    printf("\n\nNames before sorting:");
+    for(i=0;i<count;i++)
+        printf("\n%s",temp[i]);
+
+
+    /*********
+
+     * Start a outer loop and hold the present name
+     * start an inner loop starting from next value of outer loop and check the rest of the names with current loop using strcmp
+     *      strcmp(name1,name2) compares character by character
+     *      returns 0 if both strings are equal
+     *      returns negative if ASCII of first unmatched character of name1 is less than name2
+     *      returns positive if ASCII of first unmatched character of name1 is greater than second
+     * if strcmp returns a negative value then names are in ascending order do nothing
+     * if strcmp returns positive value, then swap
+     * repeat until count times
+
+     * *******/
+
+     for(i=0;i<count;i++){
+         for(j=i+1;j<count;j++){
+             if(strcmp(temp[i],temp[j]) > 0){        
+                 strcpy(swap,temp[i]);
+                 strcpy(temp[i],temp[j]);
+                 strcpy(temp[j],swap);
+             }
+         }
+     }
+
+    printf("\n\nNames after sorting:");
+    for(i=0;i<count;i++)
+        printf("\n%s",temp[i]);
+        
+    return 0;
+
+}
+
+employee.txt (Sample input file with sample data)
+1000 Margaret 500 2
+1001 Peter 600 5
+1003 Mark 550 6
+1004 John 1000 1
+1005 Alexa 600 4
+1006 Richa 650 3
+1009 Anderson 500 5
+1010 Catlene 500 5
+1011 Alice 180 7
+1013 Betty 200 4
+1014 David 880 6
+1015 Garry 900 2
+
+
